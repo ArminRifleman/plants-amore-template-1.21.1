@@ -1,19 +1,25 @@
 package com.yourname.rainbowtulip.blockentity.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.yourname.rainbowtulip.blockentity.RainbowTulipBlockEntity;
 import com.yourname.rainbowtulip.entity.client.RainbowTulipModel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<RainbowTulipBlockEntity> {
 
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath("rainbowtulip", "textures/entity/rainbow_tulip.png");
+
+    private static final float[] ROTATIONS = { 0f, 90f, 180f, 270f };
 
     private final RainbowTulipModel model;
 
@@ -26,18 +32,20 @@ public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<Rain
                        PoseStack poseStack, MultiBufferSource bufferSource,
                        int packedLight, int packedOverlay) {
 
-        poseStack.pushPose();
+        BlockPos pos = blockEntity.getBlockPos();
+        int hash = Mth.positiveModulo(pos.getX() * 73856093 ^ pos.getZ() * 19349663, 4);
+        float yRot = ROTATIONS[hash];
 
-        // No scaling — ModelPart coordinates are already in block units (1 unit = 1 block)
-        // Just center on the block and flip Y
+        poseStack.pushPose();
         poseStack.translate(0.5, 0.0, 0.5);
-        poseStack.scale(1.0F, -1.0F, 1.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+        poseStack.scale(2.4F, -2.4F, 2.4F);
         poseStack.translate(0.0, -1.5, 0.0);
 
-        this.model.renderToBuffer(
+        model.renderToBuffer(
             poseStack,
             bufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)),
-            packedLight,
+            LightTexture.FULL_BRIGHT,
             OverlayTexture.NO_OVERLAY,
             0xFFFFFFFF
         );
