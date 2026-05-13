@@ -28,12 +28,11 @@ public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<Rain
 
         poseStack.pushPose();
 
-        // Anchor Y at the bone root height (~8.2 units / 16 = 0.5125 blocks)
-        // so the stem base sits on the block surface rather than floating
-        poseStack.translate(0.5625, 0.5125, 0.4906);
-
-        // Scale to block units, flip Y to correct orientation
-        poseStack.scale(1.0F / 16.0F, -1.0F / 16.0F, 1.0F / 16.0F);
+        // No scaling — ModelPart coordinates are already in block units (1 unit = 1 block)
+        // Just center on the block and flip Y
+        poseStack.translate(0.5, 0.0, 0.5);
+        poseStack.scale(1.0F, -1.0F, 1.0F);
+        poseStack.translate(0.0, -1.5, 0.0);
 
         this.model.renderToBuffer(
             poseStack,
