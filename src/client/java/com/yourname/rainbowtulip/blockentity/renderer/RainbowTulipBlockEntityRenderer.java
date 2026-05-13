@@ -16,7 +16,7 @@ import net.minecraft.world.level.biome.Biome;
 public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<RainbowTulipBlockEntity> {
 
     private static final ResourceLocation TEXTURE =
-        ResourceLocation.fromNamespaceAndPath("rainbowtulip", "textures/entity/rainbow_tulip.png");
+            ResourceLocation.fromNamespaceAndPath("rainbowtulip", "entity/rainbow_tulip");
 
     private final RainbowTulipModel model;
 
