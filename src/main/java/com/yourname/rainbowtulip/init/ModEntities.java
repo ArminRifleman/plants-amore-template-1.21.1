@@ -1,20 +1,25 @@
 package com.yourname.rainbowtulip.init;
 
+import com.yourname.rainbowtulip.RainbowTulipMod;
 import com.yourname.rainbowtulip.entity.RainbowTulipEntity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 public class ModEntities {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-        DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, "rainbowtulip");
 
-    public static final RegistryObject<EntityType<RainbowTulipEntity>> RAINBOW_TULIP =
-        ENTITY_TYPES.register("rainbow_tulip", () ->
-            EntityType.Builder.<RainbowTulipEntity>of(RainbowTulipEntity::new, MobCategory.MISC)
-                .sized(1.0F, 1.5F)
-                .build("rainbow_tulip")
+    public static final EntityType<RainbowTulipEntity> RAINBOW_TULIP =
+        EntityType.Builder.<RainbowTulipEntity>create(RainbowTulipEntity::new, SpawnGroup.MISC)
+            .dimensions(1.0F, 1.5F)
+            .build();
+
+    public static void register() {
+        Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(RainbowTulipMod.MOD_ID, "rainbow_tulip"),
+            RAINBOW_TULIP
         );
+    }
 }

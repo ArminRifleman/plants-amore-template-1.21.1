@@ -1,30 +1,14 @@
 package com.yourname.rainbowtulip;
 
-import com.yourname.rainbowtulip.entity.client.RainbowTulipModel;
-import com.yourname.rainbowtulip.entity.client.RainbowTulipRenderer;
 import com.yourname.rainbowtulip.init.ModEntities;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.fabricmc.api.ModInitializer;
 
-@Mod("rainbowtulip")
-public class RainbowTulipMod {
+public class RainbowTulipMod implements ModInitializer {
 
-    public RainbowTulipMod() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModEntities.ENTITY_TYPES.register(bus);
-        bus.addListener(this::registerLayerDefinitions);
-        bus.addListener(this::registerRenderers);
-    }
+    public static final String MOD_ID = "rainbowtulip";
 
-    private void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(RainbowTulipModel.LAYER_LOCATION,
-            RainbowTulipModel::createBodyLayer);
-    }
-
-    private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntities.RAINBOW_TULIP.get(),
-            RainbowTulipRenderer::new);
+    @Override
+    public void onInitialize() {
+        ModEntities.register();
     }
 }

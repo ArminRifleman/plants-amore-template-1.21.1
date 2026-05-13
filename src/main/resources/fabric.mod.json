@@ -1,38 +1,21 @@
 {
-	"schemaVersion": 1,
-	"id": "plants-amore",
-	"version": "${version}",
-	"name": "Plants amore",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/plants-amore/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.example.PlantsAmore"
-		],
-		"client": [
-			"com.example.client.PlantsAmoreClient"
-		]
-	},
-	"mixins": [
-		"plants-amore.mixins.json",
-		{
-			"config": "plants-amore.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.19.2",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "rainbowtulip",
+  "version": "1.0.0",
+  "name": "Rainbow Tulip",
+  "description": "Adds a decorative Rainbow Tulip plant entity to your world.",
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.yourname.rainbowtulip.RainbowTulipMod"],
+    "client": ["com.yourname.rainbowtulip.RainbowTulipModClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.1"
+  },
+  "custom": {
+    "modmenu:tags": ["plants-amore"]
+  }
 }
