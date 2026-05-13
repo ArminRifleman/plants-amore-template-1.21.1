@@ -1,7 +1,6 @@
 package com.yourname.rainbowtulip;
 
 import com.yourname.rainbowtulip.entity.client.RainbowTulipModel;
-import com.yourname.rainbowtulip.entity.client.RainbowTulipRenderer;
 import com.yourname.rainbowtulip.init.ModEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -14,10 +13,6 @@ public class RainbowTulipModClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(
             RainbowTulipModel.LAYER_LOCATION,
             RainbowTulipModel::createBodyLayer
-        );
-        EntityRendererRegistry.register(
-            ModEntities.RAINBOW_TULIP,
-            RainbowTulipRenderer::new
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.yourname.rainbowtulip;
 
-import com.yourname.rainbowtulip.init.ModEntities;
+import com.yourname.rainbowtulip.init.ModBlockEntities;
+import com.yourname.rainbowtulip.init.ModBlocks;
 import net.fabricmc.api.ModInitializer;
 
 public class RainbowTulipMod implements ModInitializer {
@@ -9,6 +10,7 @@ public class RainbowTulipMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ModEntities.register();
+        ModBlocks.register();
+        ModBlockEntities.register();
     }
 }
