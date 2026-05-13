@@ -1,60 +1,61 @@
 package com.yourname.rainbowtulip.entity.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yourname.rainbowtulip.entity.RainbowTulipEntity;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
-public class RainbowTulipRenderer extends MobEntityRenderer<RainbowTulipEntity, RainbowTulipModel> {
+public class RainbowTulipRenderer extends MobRenderer<RainbowTulipEntity, RainbowTulipModel> {
 
-    private static final Identifier TEXTURE =
-        Identifier.of("rainbowtulip", "textures/entity/rainbow_tulip.png");
+    private static final ResourceLocation TEXTURE =
+        ResourceLocation.fromNamespaceAndPath("rainbowtulip", "textures/entity/rainbow_tulip.png");
 
-    public RainbowTulipRenderer(EntityRendererFactory.Context ctx) {
-        super(ctx, new RainbowTulipModel(ctx.getPart(RainbowTulipModel.LAYER_LOCATION)), 0.5F);
+    public RainbowTulipRenderer(EntityRendererProvider.Context ctx) {
+        super(ctx, new RainbowTulipModel(ctx.bakeLayer(RainbowTulipModel.LAYER_LOCATION)), 0.5F);
     }
 
     @Override
-    public Identifier getTexture(RainbowTulipEntity entity) {
+    public ResourceLocation getTextureLocation(RainbowTulipEntity entity) {
         return TEXTURE;
     }
 
     @Override
-    public void render(RainbowTulipEntity entity, float yaw, float tickDelta,
-                       MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(RainbowTulipEntity entity, float yaw, float partialTick,
+                       PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
-        World world = entity.getWorld();
-        BlockPos pos = entity.getBlockPos();
+        Level level = entity.level();
+        BlockPos pos = entity.blockPosition();
 
         // Sample biome foliage color at the entity's position
-        int color = world.getFoliageColor(pos);
+        int color = level.getFoliageColor(pos);
 
         float r = (float)((color >> 16) & 0xFF) / 255f;
         float g = (float)((color >> 8)  & 0xFF) / 255f;
         float b = (float)( color        & 0xFF) / 255f;
 
-        // Pack r,g,b,a into a single ARGB int (1.21.1 render API)
+        // Pack into ARGB int for 1.21.1 render API
         int tint = (0xFF << 24) | ((int)(r * 255) << 16) | ((int)(g * 255) << 8) | (int)(b * 255);
 
-        matrices.push();
-        this.setupTransforms(entity, matrices, tickDelta, yaw, tickDelta, 1.0f);
-        this.scale(entity, matrices, tickDelta);
+        poseStack.pushPose();
+        this.setupRotations(entity, poseStack, partialTick, yaw, partialTick, 1.0f);
+        this.scale(entity, poseStack, partialTick);
 
-        this.model.render(
-            matrices,
-            vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(TEXTURE)),
-            light,
-            getOverlay(entity, 0.0f),
+        this.model.renderToBuffer(
+            poseStack,
+            bufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)),
+            packedLight,
+            OverlayTexture.NO_OVERLAY,
             tint
         );
 
-        matrices.pop();
+        poseStack.popPose();
 
-        super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
+        super.render(entity, yaw, partialTick, poseStack, bufferSource, packedLight);
     }
 }

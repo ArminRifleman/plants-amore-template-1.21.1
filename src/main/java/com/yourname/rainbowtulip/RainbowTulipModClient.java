@@ -11,13 +11,10 @@ public class RainbowTulipModClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Register the model layer
         EntityModelLayerRegistry.registerModelLayer(
             RainbowTulipModel.LAYER_LOCATION,
             RainbowTulipModel::createBodyLayer
         );
-
-        // Register the entity renderer
         EntityRendererRegistry.register(
             ModEntities.RAINBOW_TULIP,
             RainbowTulipRenderer::new

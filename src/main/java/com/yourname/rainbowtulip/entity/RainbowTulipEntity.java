@@ -1,34 +1,31 @@
 package com.yourname.rainbowtulip.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 public class RainbowTulipEntity extends Entity {
 
-    public RainbowTulipEntity(EntityType<?> type, World world) {
-        super(type, world);
-        this.noClip = true; // Static plant — no collision
+    public RainbowTulipEntity(EntityType<?> type, Level level) {
+        super(type, level);
+        this.noPhysics = true;
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        // No synced data needed
-    }
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {}
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {}
+    protected void readAdditionalSaveData(CompoundTag tag) {}
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {}
+    protected void addAdditionalSaveData(CompoundTag tag) {}
 
     @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
     }
 }
