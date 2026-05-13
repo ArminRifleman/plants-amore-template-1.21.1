@@ -1,10 +1,11 @@
 package com.yourname.rainbowtulip;
 
+import com.yourname.rainbowtulip.blockentity.renderer.RainbowTulipBlockEntityRenderer;
 import com.yourname.rainbowtulip.entity.client.RainbowTulipModel;
-import com.yourname.rainbowtulip.init.ModEntities;
+import com.yourname.rainbowtulip.init.ModBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 public class RainbowTulipModClient implements ClientModInitializer {
 
@@ -13,6 +14,11 @@ public class RainbowTulipModClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(
             RainbowTulipModel.LAYER_LOCATION,
             RainbowTulipModel::createBodyLayer
+        );
+
+        BlockEntityRendererRegistry.register(
+            ModBlockEntities.RAINBOW_TULIP_BE,
+            RainbowTulipBlockEntityRenderer::new
         );
     }
 }

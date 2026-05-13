@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "rainbowtulip:textures/entity/rainbow_tulip"
+    "layer0": "rainbowtulip:entity/rainbow_tulip"
   }
 }

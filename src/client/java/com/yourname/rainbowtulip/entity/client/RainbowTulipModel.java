@@ -2,15 +2,15 @@ package com.yourname.rainbowtulip.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.Model;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
-public class RainbowTulipModel extends Model {
+public class RainbowTulipModel extends EntityModel<Entity> {
 
     public static final ModelLayerLocation LAYER_LOCATION =
         new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("rainbowtulip", "rainbow_tulip"), "main");
@@ -19,7 +19,6 @@ public class RainbowTulipModel extends Model {
     private final ModelPart bone7;
 
     public RainbowTulipModel(ModelPart root) {
-        super(RenderType::entityCutoutNoCull);
         this.bone6 = root.getChild("bone6");
         this.bone7 = root.getChild("bone7");
     }
@@ -104,7 +103,14 @@ public class RainbowTulipModel extends Model {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount,
+                          float ageInTicks, float netHeadYaw, float headPitch) {
+        // Static decorative block — no animation needed
+    }
+
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer,
+                               int packedLight, int packedOverlay, int color) {
         bone6.render(poseStack, buffer, packedLight, packedOverlay, color);
         bone7.render(poseStack, buffer, packedLight, packedOverlay, color);
     }
