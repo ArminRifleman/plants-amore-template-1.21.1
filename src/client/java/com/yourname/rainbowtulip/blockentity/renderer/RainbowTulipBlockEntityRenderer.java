@@ -41,7 +41,7 @@ public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<Rain
         poseStack.pushPose();
         poseStack.translate(0.5, 0.0, 0.5);
         poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
-        poseStack.scale(2.4F, -2.4F, 2.4F);
+        poseStack.scale(2.0F, -2.0F, 2.0F);
         poseStack.translate(0.0, -1.5, 0.0);
 
         var buffer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
