@@ -13,6 +13,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
 
 public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<RainbowTulipBlockEntity> {
 
@@ -20,6 +22,9 @@ public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<Rain
             ResourceLocation.fromNamespaceAndPath("rainbowtulip", "textures/entity/rainbow_tulip.png");
 
     private static final float[] ROTATIONS = { 0f, 90f, 180f, 270f };
+
+    // Default grass green used as fallback if biome has no override
+    private static final int DEFAULT_GRASS = 0x79C05A;
 
     private final RainbowTulipModel model;
 
@@ -36,19 +41,21 @@ public class RainbowTulipBlockEntityRenderer implements BlockEntityRenderer<Rain
         int hash = Mth.positiveModulo(pos.getX() * 73856093 ^ pos.getZ() * 19349663, 4);
         float yRot = ROTATIONS[hash];
 
+        // Get biome grass color
+        Biome biome = blockEntity.getLevel().getBiome(pos).value();
+        BiomeSpecialEffects effects = biome.getSpecialEffects();
+        int grassColor = effects.getGrassColorOverride()
+                .orElseGet(() -> effects.getFoliageColorOverride()
+                        .orElse(DEFAULT_GRASS));
+
         poseStack.pushPose();
         poseStack.translate(0.5, 0.0, 0.5);
         poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
         poseStack.scale(2.4F, -2.4F, 2.4F);
         poseStack.translate(0.0, -1.5, 0.0);
 
-        model.renderToBuffer(
-            poseStack,
-            bufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)),
-            LightTexture.FULL_BRIGHT,
-            OverlayTexture.NO_OVERLAY,
-            0xFFFFFFFF
-        );
+        var buffer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+        model.renderWithBiomeTint(poseStack, buffer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, grassColor);
 
         poseStack.popPose();
     }
